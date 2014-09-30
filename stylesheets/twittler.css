@@ -1,0 +1,13 @@
+.tweet {
+    width: 450px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+blockquote {
+    padding: 30px;
+}
+
+.get-new-tweets {
+    horizontal-align: right;
+}

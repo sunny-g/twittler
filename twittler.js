@@ -23,8 +23,24 @@ $(document).ready(function(){
     $pill.append($link);
     $navbar.append($pill)
   });
-  // $($navbar.find('li')[0]).addClass('active');
+
+  var $autoRefreshButton = $('<li id="auto-refresh">' +
+    '<button class="btn btn-default" type="button">Auto Refresh</button>' +
+    '</li>');
+  var $getTweetsButton = $('<li id="get-new-tweets">' +
+    '<button class="btn btn-primary" type="button">Get New Tweets</button>' +
+    '</li>');
+  $navbar.append($getTweetsButton);
+  $navbar.append($autoRefreshButton);
+
+  // inserts navbar right after the page-header
   $('.page-header').after($navbar);
+  displayTweets('All Tweets');
+
+
+
+  // EVENTS
+  /////////
 
   $('.nav').on('click', '.users-tweets', function(e) {
     e.preventDefault();
@@ -36,7 +52,23 @@ $(document).ready(function(){
     displayTweets(tabName);
   });
 
+  $('#auto-refresh').on('click', 'button', function(e) {
+    e.preventDefault();
+    $(this).toggleClass('btn-success')
+  });
 
+  $('#get-new-tweets').on('click', 'button', function(e) {
+    e.preventDefault();
+    getNewTweets();
+  });
+
+  // FUNCTIONS
+  ////////////
+
+  function getNewTweets() {
+    var name = $('li.users-tweets.active').find('a').text();
+    displayTweets(name);
+  }
 
   function displayTweets(name) {
     // console.log('displaying tweets...');
@@ -53,15 +85,20 @@ $(document).ready(function(){
       index = tweetList.length - 1;
     } else {
       name = name.slice(1, name.length);
-      // console.log(name)
       tweetList = streams.users[name];
       index = tweetList.length - 1;
     }
 
     while (index >= 0) {
       var tweet = tweetList[index];
-      var $tweet = $('<div class="well span6"></div>');
-      var text = '@' + tweet.user + ': ' + tweet.message + tweet.created_at;
+      var $tweet = $('<div class="tweet darkwell"></div>');
+
+      // var text = '@' + tweet.user + ': ' + tweet.message + tweet.created_at;
+      var $blockquote = $('<blockquote></blockquote>');
+      $blockquote.append($('<p>' + tweet.message + '</p>'));
+      $blockquote.append($('<small>@' + tweet.user +', ' + moment(tweet.created_at).fromNow() + '</small>'));
+
+      $tweet.append($blockquote);
       // $tweet.text()
       $tweet.appendTo($tweetBox);
       index -= 1;
