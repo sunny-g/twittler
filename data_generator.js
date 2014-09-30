@@ -11,6 +11,7 @@ streams.users.shawndrost = [];
 streams.users.sharksforcheap = [];
 streams.users.mracus = [];
 streams.users.douglascalhoun = [];
+// doesn't include new users
 window.users = Object.keys(streams.users);
 
 // utility function for adding tweets to our data structures
@@ -46,13 +47,15 @@ var generateRandomTweet = function(){
   addTweet(tweet);
 };
 
+// creates a corpus of random tweets
 for(var i = 0; i < 10; i++){
   generateRandomTweet();
 }
 
+// creates random tweets at most once every 10s
 var scheduleNextTweet = function(){
   generateRandomTweet();
-  setTimeout(scheduleNextTweet, Math.random() * 1500);
+  setTimeout(scheduleNextTweet, Math.random() * 10000);
 };
 scheduleNextTweet();
 
