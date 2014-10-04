@@ -1,6 +1,5 @@
 $(document).ready(function(){
 
-
   var $body = $('body');
   // $body.html('');
 
@@ -54,7 +53,14 @@ $(document).ready(function(){
 
   $('#auto-refresh').on('click', 'button', function(e) {
     e.preventDefault();
-    $(this).toggleClass('btn-success')
+    $(this).toggleClass('btn-success');
+
+    if ($(this).hasClass('btn-success')) {
+      autoRefresh = setInterval(getNewTweets, 2000);
+    } else {
+      clearInterval(autoRefresh);
+    }
+
   });
 
   $('#get-new-tweets').on('click', 'button', function(e) {
