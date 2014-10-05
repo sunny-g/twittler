@@ -1,10 +1,8 @@
 $(document).ready(function(){
 
-  var $body = $('body');
-  // $body.html('');
-
   // creates new user on pageload, adds the name to the global users arr
   var newUser = prompt('What is you desired username?');
+  window.visitor = newUser;
   streams.users[newUser] = [];
   users.push(newUser);
 
@@ -12,7 +10,7 @@ $(document).ready(function(){
   // create navbar, create pill for each user
   // if you add user, create new pill
   // make first pill active
-  var $navbar = $('<ul class="nav nav-pills"></ul>');
+  var $navbar = $('#navbar');
   var $pill = $('<li class="active users-tweets"></li>');
   var $link = $('<a href="#">All Tweets</a>');
   $navbar.append($pill.append($link));
@@ -32,14 +30,19 @@ $(document).ready(function(){
   $navbar.append($getTweetsButton);
   $navbar.append($autoRefreshButton);
 
-  // inserts navbar right after the page-header
-  $('.page-header').after($navbar);
+  $('#userNav').append($navbar);
   displayTweets('All Tweets');
 
 
 
   // EVENTS
   /////////
+
+  $('#submitTweet').on('click', function(e) {
+    e.preventDefault();
+    var msg = $('#innerWriteBox').val();
+    writeTweet(msg);
+  });
 
   $('.nav').on('click', '.users-tweets', function(e) {
     e.preventDefault();
@@ -53,6 +56,7 @@ $(document).ready(function(){
 
   $('#auto-refresh').on('click', 'button', function(e) {
     e.preventDefault();
+
     $(this).toggleClass('btn-success');
 
     if ($(this).hasClass('btn-success')) {
@@ -60,7 +64,6 @@ $(document).ready(function(){
     } else {
       clearInterval(autoRefresh);
     }
-
   });
 
   $('#get-new-tweets').on('click', 'button', function(e) {
@@ -99,7 +102,6 @@ $(document).ready(function(){
       var tweet = tweetList[index];
       var $tweet = $('<div class="tweet darkwell"></div>');
 
-      // var text = '@' + tweet.user + ': ' + tweet.message + tweet.created_at;
       var $blockquote = $('<blockquote></blockquote>');
       $blockquote.append($('<p>' + tweet.message + '</p>'));
       $blockquote.append($('<small>@' + tweet.user +', ' + moment(tweet.created_at).fromNow() + '</small>'));
@@ -111,14 +113,6 @@ $(document).ready(function(){
 
     }
   }
-
-
-
-/*
-autorefresh = displayTweets on a timer
- */
-
-
 
 
 });
